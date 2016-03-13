@@ -9,8 +9,8 @@ const int buttonPin = PIN_SW0;
 int buttonState = 0;              
 char input;                       // input du port Serial afin de controller les Servo
 String buffer;                    // buffer permettant de lire l'input du serveur web
-char ssid[] = "Livebox-3D32";          // your network SSID (name)
-char pass[] = "3E9491EE5A27C66455324714A2";         // your network password
+char ssid[] = "SSID";             // your network SSID (name)
+char pass[] = "PASSWORD";         // your network password
 int keyIndex = 0;                 // your network key Index number (needed only for WEP)
 
 
