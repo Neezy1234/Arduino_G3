@@ -1,3 +1,43 @@
+#include <BlynkApiArduino.h>
+#include <BlynkApiParticle.h>
+#include <BlynkParticle.h>
+#include <BlynkSimpleCC3000.h>
+#include <BlynkSimpleEnergiaWiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <BlynkSimpleEsp8266_SSL.h>
+#include <BlynkSimpleEthernet.h>
+#include <BlynkSimpleEthernet2.h>
+#include <BlynkSimpleEthernetV2_0.h>
+#include <BlynkSimpleIntelEdisonWiFi.h>
+#include <BlynkSimpleLinkItONE.h>
+#include <BlynkSimpleMKR1000.h>
+#include <BlynkSimpleParticle.h>
+#include <BlynkSimpleRBL_CC3200.h>
+#include <BlynkSimpleRBL_WiFi_Mini.h>
+#include <BlynkSimpleRedBear_Duo.h>
+#include <BlynkSimpleSerial.h>
+#include <BlynkSimpleShieldEsp8266.h>
+#include <BlynkSimpleShieldEsp8266_HardSer.h>
+#include <BlynkSimpleShieldEsp8266_SoftSer.h>
+#include <BlynkSimpleTinyDuino.h>
+#include <BlynkSimpleTI_CC3200_LaunchXL.h>
+#include <BlynkSimpleTI_TivaC_Connected.h>
+#include <BlynkSimpleUIPEthernet.h>
+#include <BlynkSimpleUserDefined.h>
+#include <BlynkSimpleWifi.h>
+#include <BlynkSimpleWiFiShield101.h>
+#include <BlynkSimpleWiFiShield101_SSL.h>
+#include <BlynkSimpleWiFly.h>
+#include <BlynkSimpleWildFire.h>
+#include <BlynkSimpleYun.h>
+#include <BlynkWidgets.h>
+#include <WidgetBridge.h>
+#include <WidgetLCD.h>
+#include <WidgetLED.h>
+#include <WidgetRTC.h>
+#include <WidgetSD.h>
+#include <WidgetTerminal.h>
+
 #include <ArduinoUnit.h>
 
 #include <Servo.h>
@@ -28,57 +68,8 @@ void setup() {
 
 }
 
-void Move(char input) {
-//Move forward, backward, right and left depending on the input.
-//Valid input:
-// z(forward)
-// s(backward)
-// q(left)
-// d(right)
-
-  switch(input){
-      case 'z' :
-        // Move forward;
-        servo1.write(0);
-        servo2.write(180);
-        break;
-      case 's':
-        // Move backward;
-        servo1.write(180);
-        servo2.write(0);
-        break;
-      case 'q' :
-        // Move left;
-        servo1.write(0);
-        servo2.write(0);
-        break;
-      case 'd':
-        // Move right;
-        servo1.write(180);
-        servo2.write(180);
-        break;
-      case 'p':
-        // Pause/Stop both servos
-        servo1.write(90);
-        servo2.write(90);
-        break;
-    }
-}
-
-void serialMove() {
-//Read the serial inputs and call the move function to move accordingly
-
-  if(Serial.available()) {   
-    input = Serial.read();
-    Serial.println(input);
-    Move(input);
-   }
-}
-
 void loop() {
   // put your main code here, to run repeatedly
-
-  serialMove();
-  
+  Move('z');  
 }
 
