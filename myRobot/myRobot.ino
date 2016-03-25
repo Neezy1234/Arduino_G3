@@ -56,8 +56,26 @@ void setup() {
 
 }
 
+boolean detectObstacle(int sensor) {
+
+  boolean result;
+  
+  //On indique si un obstacle est present devant
+    if(sensor > 120 ) {
+      result = true;
+    }
+    else {
+      result = false;
+    }
+
+    return result;
+}
+
 void loop() {
   // put your main code here, to run repeatedly
+
+  //Lance les tests unitaires
+  Test::run();
 
   //On lit l'etat du bouton (appuye ou pas
   buttonState = digitalRead(buttonPin);
@@ -95,13 +113,7 @@ void loop() {
     Serial.println(rightSensor);
     */
 
-    //On indique si un obstacle est present devant
-    if(frontSensor > 120 ) {
-      obstacle = true;
-    }
-    else {
-      obstacle = false;
-    }
+    obstacle = detectObstacle(frontSensor);    
 
     //Si il y a un obstacle on s'arrete sinon on avance
     if(obstacle == false) {

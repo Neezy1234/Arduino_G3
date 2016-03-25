@@ -32,5 +32,5 @@ void Move(char input) {
         servo1.write(90);
         servo2.write(90);
         break;
-    }
+     }
 }
