@@ -56,36 +56,16 @@ void setup() {
 
 }
 
-boolean detectObstacle(int sensor) {
-
-  boolean result;
-  
-  //On indique si un obstacle est present devant
-    if(sensor > 120 ) {
-      result = true;
-    }
-    else {
-      result = false;
-    }
-
-    return result;
-}
-
 void loop() {
   // put your main code here, to run repeatedly
 
-  //Lance les tests unitaires
   Test::run();
 
   //On lit l'etat du bouton (appuye ou pas
   buttonState = digitalRead(buttonPin);
 
   //Si le bouton est appuye on change le boolean "power"
-  if(buttonState == LOW) {
-    power = !power;
-    if(power == false) Move('p'); //Pause des servos
-    delay(500);
-  }
+  power = switchPower(power, buttonState);
 
   //Si "power" est true on effectue le code sinon on fait rien
   if(power == true) {
