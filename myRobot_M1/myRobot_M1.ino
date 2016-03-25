@@ -2,6 +2,8 @@
  * Projet Agilite/Application embarque
  * IUT Informatique - Aix-en-Provence
  * 
+ * MISSION 1 : S'ARRETER FACE AU MUR
+ * 
  * Groupe 3 :
  * Yasmine AMAR, Valentin COURDY,
  * Sandro ENCISO, Justin FAYARD
@@ -10,7 +12,7 @@
  */
 
 
-//#include <ArduinoUnit.h>
+#include <ArduinoUnit.h>
 #include <Servo.h>
 #include <SPI.h>
 #include <WiFi101.h>
@@ -75,7 +77,7 @@ BLYNK_WRITE(V2)
 void loop() {
   // put your main code here, to run repeatedly
 
-  //Test::run();
+  Test::run();
   Blynk.run();
 
   //On lit l'etat du bouton (appuye ou pas
@@ -118,8 +120,8 @@ void loop() {
       Move('z'); //Avance
     }
     else {
-      Move('q');
-      delay(300);
+      Move('p');
+      //delay(300);
     }
   }
 
