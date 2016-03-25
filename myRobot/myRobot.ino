@@ -10,13 +10,17 @@
  */
 
 
-#include <ArduinoUnit.h>
+//#include <ArduinoUnit.h>
 #include <Servo.h>
 #include <SPI.h>
+#include <WiFi101.h>
+#include <BlynkSimpleWiFiShield101.h>
 
 //Declaration des servos 1 et 2
 Servo servo1;
 Servo servo2;
+
+char auth[] = "33ea8e08e9614f4d920db366e20ce38c"; // Put your Auth Token here. (see Step 3 above)
 
 //Declaration des variables globales (etats, valeurs...)
 int buttonState = 0;   
@@ -52,19 +56,33 @@ void setup() {
 
   //Initialisation du serial monitor
   Serial.begin(115200);
+  Blynk.begin(auth,"AndroidHotspot4330","JB2DB4KD");
   while(!Serial){}
 
+}
+
+BLYNK_WRITE(V2)
+{
+  if(param.asInt() == 0)
+  {
+    power = switchPower(power, HIGH);
+  }
+  else {
+    power = switchPower(power, LOW);
+  } 
 }
 
 void loop() {
   // put your main code here, to run repeatedly
 
-  Test::run();
+  //Test::run();
+  Blynk.run();
 
   //On lit l'etat du bouton (appuye ou pas
   buttonState = digitalRead(buttonPin);
 
   //Si le bouton est appuye on change le boolean "power"
+
   power = switchPower(power, buttonState);
 
   //Si "power" est true on effectue le code sinon on fait rien
