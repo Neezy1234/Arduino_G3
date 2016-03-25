@@ -115,12 +115,13 @@ void loop() {
 
     obstacle = detectObstacle(frontSensor);    
 
-    //Si il y a un obstacle on s'arrete sinon on avance
+    //Si il y a un obstacle on tourne à gauche sinon on avance
     if(obstacle == false) {
       Move('z'); //Avance
     }
     else {
-      Move('p'); //Pause
+      Move('q');
+      delay(300);
     }
   }
 

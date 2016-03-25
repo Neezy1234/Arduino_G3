@@ -17,13 +17,13 @@ void Move(char input) {
         servo1.write(180);
         servo2.write(0);
         break;
-      case 'q' :
-        // Move left;
+      case 'd' :
+        // Move right;
         servo1.write(0);
         servo2.write(0);
         break;
-      case 'd':
-        // Move right;
+      case 'q':
+        // Move left;
         servo1.write(180);
         servo2.write(180);
         break;
