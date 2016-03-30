@@ -12,17 +12,17 @@
  */
 
 
-#include <ArduinoUnit.h>
+//#include <ArduinoUnit.h>
 #include <Servo.h>
 #include <SPI.h>
 #include <WiFi101.h>
-#include <BlynkSimpleWiFiShield101.h>
+//#include <BlynkSimpleWiFiShield101.h>
 
 //Declaration des servos 1 et 2
 Servo servo1;
 Servo servo2;
 
-char auth[] = "33ea8e08e9614f4d920db366e20ce38c"; // Put your Auth Token here. (see Step 3 above)
+//char auth[] = "33ea8e08e9614f4d920db366e20ce38c"; // Put your Auth Token here. (see Step 3 above)
 
 //Declaration des variables globales (etats, valeurs...)
 int buttonState = 0;   
@@ -39,9 +39,9 @@ boolean obstacle = false;
 const int buttonPin = PIN_SW0;    // Numero du pin du bouton
 const int ledPin    = PIN_LED_13; // Numero du pin de la LED
 const int frontSensorPin = A0;    // Numero du pin du capteur avant
-const int backSensorPin  = A1;    // Numero du pin du capteur arriere
-const int leftSensorPin  = A2;    // Numero du pin du capteur gauche
-const int rightSensorPin = A3;    // Numero du pin du capteur droit
+//const int backSensorPin  = A2;    // Numero du pin du capteur arriere
+const int leftSensorPin  = A1;    // Numero du pin du capteur gauche
+const int rightSensorPin = A2;    // Numero du pin du capteur droit
 
 void setup() {
   // put your setup code here, to run once:
@@ -58,11 +58,11 @@ void setup() {
 
   //Initialisation du serial monitor
   Serial.begin(115200);
-  Blynk.begin(auth,"AndroidHotspot4330","JB2DB4KD");
+  //Blynk.begin(auth,"AndroidHotspot4330","JB2DB4KD");
   while(!Serial){}
 
 }
-
+/*
 BLYNK_WRITE(V2)
 {
   if(param.asInt() == 0)
@@ -73,12 +73,12 @@ BLYNK_WRITE(V2)
     power = switchPower(power, LOW);
   } 
 }
-
+*/
 void loop() {
   // put your main code here, to run repeatedly
 
-  Test::run();
-  Blynk.run();
+  //Test::run();
+  //Blynk.run();
 
   //On lit l'etat du bouton (appuye ou pas
   buttonState = digitalRead(buttonPin);
@@ -95,11 +95,9 @@ void loop() {
 
     //On lit les valeurs des capteurs
     frontSensor = analogRead(frontSensorPin);
-    /*
-    backSensor  = analogRead(backSensorPin);
+    /*backSensor  = analogRead(backSensorPin);*/
     leftSensor  = analogRead(leftSensorPin);
     rightSensor = analogRead(rightSensorPin);
-    */
     
     //On affiche les valeurs des capteurs
     Serial.print("Front sensor : ");
@@ -107,21 +105,18 @@ void loop() {
     /*
     Serial.print("Back sensor : ");
     Serial.println(backSensor);
+    */
     Serial.print("Left sensor : ");
     Serial.println(leftSensor);
     Serial.print("Right sensor : ");
     Serial.println(rightSensor);
-    */
-
-    obstacle = detectObstacle(frontSensor);    
 
     //Si il y a un obstacle on tourne à gauche sinon on avance
-    if(obstacle == false) {
-      Move('z'); //Avance
+    if(detectObstacle(frontSensor) || detectObstacle(leftSensor) || detectObstacle(rightSensor)) {
+      Move('p'); //S'arrete
     }
     else {
-      Move('q');
-      delay(300);
+      Move('z');
     }
   }
 

@@ -1,3 +1,4 @@
+/*
 //TESTS DE DETECTION D'OBSTACLES
 test(obstacleDetected) 
 {
@@ -65,4 +66,4 @@ test(turnRight)
   assertEqual(0, servo1.read());
   assertEqual(0, servo2.read());
   Move('p'); //pause les servo après le test
-}
+}*/
