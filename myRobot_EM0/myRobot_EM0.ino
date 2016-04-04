@@ -1,118 +1,78 @@
-/*
- * Projet Agilite/Application embarque
- * IUT Informatique - Aix-en-Provence
- * 
- * MISSION ESSAIM 0 - ELECTION DU LEADER PAR BROADCAST
- * 
- * Groupe 3 :
- * Yasmine AMAR, Valentin COURDY,
- * Sandro ENCISO, Justin FAYARD
- * Hafid HOUT, Alexis MARTIN
- * 
- */
-
-
-//#include <ArduinoUnit.h>
-#include <Servo.h>
-#include <SPI.h>
+#include <SPI.h>        
 #include <WiFi101.h>
-//#include <BlynkSimpleWiFiShield101.h>
+#include <WiFiUdp.h>
 
-//Declaration des servos 1 et 2
-Servo servo1;
-Servo servo2;
+char ssid[] = "Wifi_Arduino";      			// your network SSID (name)
+char pass[] = "aarduino";   			      // your network password
+int keyIndex = 0;                 		  // your network key Index number (needed only for WEP)
+unsigned int localPort = 8888;          // local port to listen on
+bool isLeader = true;
+char packetBuffer[255];                 //buffer to hold incoming packet
+char  ReplyBuffer[] = "hello";          // a string to send back
+IPAddress IPLead;
+const int ledPin = PIN_LED_13;
+WiFiUDP Udp;
 
-//char auth[] = "33ea8e08e9614f4d920db366e20ce38c"; // Put your Auth Token here. (see Step 3 above)
-
-//Declaration des variables globales (etats, valeurs...)
-int buttonState = 0;   
-int frontSensor = 0;
-int backSensor = 0;
-int leftSensor = 0;
-int rightSensor = 0;
-
-boolean power = false;          
-boolean obstacle = false;
-
-
-//Declaration des PINs
-const int buttonPin = PIN_SW0;    // Numero du pin du bouton
-const int ledPin    = PIN_LED_13; // Numero du pin de la LED
-const int frontSensorPin = A0;    // Numero du pin du capteur avant
-//const int backSensorPin  = A2;    // Numero du pin du capteur arriere
-const int leftSensorPin  = A1;    // Numero du pin du capteur gauche
-const int rightSensorPin = A2;    // Numero du pin du capteur droit
+int status = WL_IDLE_STATUS;
 
 void setup() {
-  // put your setup code here, to run once:
+    pinMode(ledPin, OUTPUT);
 
-  pinMode(buttonPin, INPUT_PULLUP);
+    Serial.begin(115200);
+    while (!Serial) {}
+    if (WiFi.status() == WL_NO_SHIELD) {
+        Serial.println("WiFi shield not present");
+        while (true);
+    }
 
-  //"Initialise" les servo 1 et 2
-  servo1.attach(16);
-  servo2.attach(17);
 
-  //Position des servos à l'arret/par défaut
-  servo1.write(90);
-  servo2.write(90);
-
-  //Initialisation du serial monitor
-  Serial.begin(115200);
-  //Blynk.begin(auth,"AndroidHotspot4330","JB2DB4KD");
-  while(!Serial){}
-
-}
-/*
-BLYNK_WRITE(V2)
-{
-  if(param.asInt() == 0)
-  {
-    power = switchPower(power, HIGH);
+  // attempt to connect to Wifi network:
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(ssid);
+    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+    status = WiFi.begin(ssid,pass);
+    // wait 10 seconds for connection:
+    delay(1000);
   }
-  else {
-    power = switchPower(power, LOW);
-  } 
+  Serial.println("Connected to wifi");
+
+  Serial.println("\nStarting connection to server...");
+  // if you get a connection, report back via serial:
+  Udp.begin(localPort);
+  Udp.beginPacket("255.255.255.255", 8888);
+  Udp.write("Je suis le leader");
+  Udp.endPacket();
 }
-*/
+
+
+
 void loop() {
-  // put your main code here, to run repeatedly
-
-  //Test::run();
-  //Blynk.run();
-
-  //On lit l'etat du bouton (appuye ou pas
-  buttonState = digitalRead(buttonPin);
-
-  //Si le bouton est appuye on change le boolean "power"
-
-  power = switchPower(power, buttonState);
-
-  //Si "power" est true on effectue le code sinon on fait rien
-  if(power == true) {
-
-    //Change la resolution de la lecture analogue (8 bits)
-    analogReadResolution(8);
-
-    //On lit les valeurs des capteurs
-    frontSensor = analogRead(frontSensorPin);
-    /*backSensor  = analogRead(backSensorPin);*/
-    leftSensor  = analogRead(leftSensorPin);
-    rightSensor = analogRead(rightSensorPin);
-    
-    //On affiche les valeurs des capteurs
-    Serial.print("Front sensor : ");
-    Serial.println(frontSensor);
-    /*
-    Serial.print("Back sensor : ");
-    Serial.println(backSensor);
-    */
-    Serial.print("Left sensor : ");
-    Serial.println(leftSensor);
-    Serial.print("Right sensor : ");
-    Serial.println(rightSensor);
-
-    //La fonction
-  }
-
+    if(isLeader){
+      digitalWrite(ledPin, LOW);
+    }
+    else {
+        digitalWrite(ledPin, HIGH);
+        delay(1000);
+        digitalWrite(ledPin, LOW);
+        delay(1000);
+    }
+    int packetSize = Udp.parsePacket();
+    if (packetSize) {
+      IPAddress remoteIP = Udp.remoteIP();
+      localPort = Udp.remotePort();
+  
+      int len = Udp.read(packetBuffer, 255);
+      if (len > 0) {
+        packetBuffer[len] = 0;
+      }
+      String message = packetBuffer;
+      message.trim();
+      if(message == "Je suis le leader"){
+        isLeader = false;
+        IPLead = remoteIP;
+        Serial.print("Nouveau leader : ");
+        Serial.println(IPLead);
+      }
+    }
 }
-
