@@ -1,21 +1,21 @@
 ﻿# Arduino_G3
 Développement d'application embarquée - Arduino. Montage d'un robot dirigeable depuis un site web ou un SmartPhone.
 
-# Missions
+## Missions
 
-Autonomie : 
+### Autonomie : 
 Mission 0 : Arrêt d'urgence avec Blynk.cc - Validée et se trouve dans les fichiers à partir de la mission 1
 Mission 1 : Avancer tout droit avec arrêt obstacle - Validée, voir myRobot_M1
 Mission 2 : Avancer et éviter les obstacles en tournant à gauche quand l'obstacle est à moins de 5 cm - Validée, voir myRobot_M2
 Mission 3 : Suiveur de ligne - Validée, voir myRobot_M3
 Mission 4 : Suiveur de mur pour sortir d'un labyrinthe - Validée, voir myRobot_M4
 
-Essaim : 
+### Essaim : 
 Mission 0 : Élection du leader par broadcast (Dernier arrivé) - Validée, voir myRobot_EM0
 Mission 1 : Se comporter comme le leader
 Mission 2 : Suivi du leader
 
-# Autre
+## Autre
 
 DirectionRobot => permet de contrôler le robot via Blynk
 Boussole => lis les valeurs de la boussole and DANCE !
